@@ -15,3 +15,4 @@ Extra
 [Join the discord](https://discord.gg/qSz6WtxzFv)
 
 Made by meteorbee
+The generation website was made with Claude
