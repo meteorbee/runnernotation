@@ -2,7 +2,7 @@
 
 ## The symbols  
 ![Icons](https://raw.githubusercontent.com/meteorbee/runnernotation/refs/heads/main/Resources/RunnerNotationGuideWithBackground.png)
-Every symbol (or dot) in RGN represents a move in Runner Geam. To note down a move, draw lines between them in the order you do the move. The starting point should always have a circle around it.`  
+Every symbol (or dot) in RGN represents a move in Runner Geam. To note down a move, draw lines between them in the order you do the move. The starting point should always have a circle around it.
 
 Download
 
