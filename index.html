@@ -3,8 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Runnernotation Maker</title>
+<title>RunnerNotation Creator</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<meta property="og:title" content="RunnerNotation Creator">
+<meta property="og:description" content="A site to make RunnerNotation, a way of noting down Tech's and Move Combo's for the Roblox game, Runner Geam!">
+<meta property="og:image" content="https://raw.githubusercontent.com/meteorbee/runnernotation/refs/heads/main/Resources/Logo.png">
+<meta property="og:url" content="https://meteorbee.github.io/runnernotation/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fc0328">
+
+<meta charset="UTF-8">
+<meta name="description" content="A site to make RunnerNotation, a way of noting down Tech's and Move Combo's for the Roblox game, Runner Geam!">
+<meta name="keywords" content="Roblox, Game, Notation, Utility, Runner, Runner geam, Runner game, Noting, Sharing, Techs, Roblox techs, Runner techs">
+<meta name="author" content="meteorbee">
+
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/meteorbee/runnernotation/refs/heads/main/Resources/Favicon.png">
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,183 +30,95 @@
     --text: #1a1916;
     --muted: #888480;
     --accent: #e53030;
-    --dot: #1a1916;
     --mono: 'DM Mono', monospace;
     --sans: 'DM Sans', sans-serif;
   }
 
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
-
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
   .page { max-width: 860px; margin: 0 auto; }
 
   header { margin-bottom: 2.5rem; }
-  header h1 {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
+  header h1 { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
   header p { font-size: 28px; font-weight: 300; color: var(--text); letter-spacing: -0.01em; }
   header p span { color: var(--accent); }
 
-  .layout {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 1.5rem;
-    align-items: start;
-  }
+  .locked-banner { display: flex; align-items: center; gap: 8px; background: #fff8e6; border: 1px solid #f0d89a; border-radius: 8px; padding: 9px 14px; margin-bottom: 1rem; font-size: 13px; color: #7a5c00; }
+
+  .layout { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
   @media (max-width: 600px) { .layout { grid-template-columns: 1fr; } }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+  .card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
-  .card-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  .move-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    padding: 8px 10px;
-    margin-bottom: 4px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: transparent;
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.12s;
-    text-align: left;
-  }
+  .move-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; margin-bottom: 4px; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--text); cursor: pointer; transition: all 0.12s; text-align: left; }
   .move-btn:hover { background: var(--bg); border-color: #c8c4bb; }
   .move-btn .index { font-family: var(--mono); font-size: 10px; color: var(--muted); width: 14px; flex-shrink: 0; }
+  .move-btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
   .right-col { display: flex; flex-direction: column; gap: 1rem; }
 
-  .sequence-area {
-    min-height: 52px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: flex-start;
-  }
-
+  .sequence-area { min-height: 52px; display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
   .empty-hint { font-size: 13px; color: var(--muted); padding-top: 2px; font-style: italic; }
 
-  .seq-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px 4px 8px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--text);
-    animation: popIn 0.15s ease;
-  }
+  .seq-tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px 4px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: var(--text); animation: popIn 0.15s ease; }
   .seq-tag .num { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 500; }
   .seq-tag .rm { cursor: pointer; color: var(--muted); font-size: 15px; line-height: 1; margin-left: 2px; transition: color 0.1s; }
   .seq-tag .rm:hover { color: var(--accent); }
 
-  @keyframes popIn {
-    from { transform: scale(0.85); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
+  @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px; }
-
-  .btn {
-    font-family: var(--sans);
-    font-size: 12px;
-    padding: 7px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.12s;
-    font-weight: 400;
-  }
+  .btn { font-family: var(--sans); font-size: 12px; padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); cursor: pointer; transition: all 0.12s; }
   .btn:hover { background: var(--bg); }
   .btn.dl { background: var(--text); color: #fff; border-color: var(--text); font-weight: 500; }
   .btn.dl:hover { background: #333; border-color: #333; }
+  .btn.share { display: inline-flex; align-items: center; gap: 6px; }
+
+  .share-url-row { display: flex; gap: 6px; margin-top: 10px; }
+  .share-url-row input { flex: 1; font-family: var(--mono); font-size: 11px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; min-width: 0; }
 
   .divider { height: 1px; background: var(--border); margin: 12px 0; }
 
-  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
   .toggle-label { font-size: 13px; color: var(--text); }
 
   .toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
   .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-  .toggle-track {
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    background: var(--border);
-    cursor: pointer;
-    transition: background 0.18s;
-  }
-  .toggle-track::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 3px;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    transition: transform 0.18s;
-  }
+  .toggle-track { position: absolute; inset: 0; border-radius: 20px; background: var(--border); cursor: pointer; transition: background 0.18s; }
+  .toggle-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform 0.18s; }
   .toggle input:checked + .toggle-track { background: var(--text); }
   .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
 
   .field-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
   .field-row:last-child { margin-bottom: 0; }
-  .field-row label { font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.06em; }
-  .field-row input {
-    font-family: var(--sans);
-    font-size: 13px;
-    padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.12s;
-  }
-  .field-row input:focus { border-color: #aaa9a5; background: #fff; }
-  .field-row input::placeholder { color: var(--muted); }
+  .field-row > label { font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between; }
+
+  .lock-toggle { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-size: 10px; color: var(--muted); letter-spacing: 0.04em; transition: color 0.12s; user-select: none; }
+  .lock-toggle:hover { color: var(--text); }
+  .lock-toggle input[type="checkbox"] { display: none; }
+  .lock-icon .icon-closed { display: none; }
+  .lock-toggle input[type="checkbox"]:checked ~ .lock-icon .icon-open { display: none; }
+  .lock-toggle input[type="checkbox"]:checked ~ .lock-icon .icon-closed { display: inline; }
+  .lock-toggle input[type="checkbox"]:checked ~ .lock-text { color: var(--accent); }
+
+  .field-row input[type="text"] { font-family: var(--sans); font-size: 13px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; transition: border-color 0.12s; width: 100%; }
+  .field-row input[type="text"]:focus { border-color: #aaa9a5; background: #fff; }
+  .field-row input[type="text"]::placeholder { color: var(--muted); }
+  .field-row input[type="text"].is-locked { border-color: #f0d89a; background: #fffdf5; }
+  .field-row input[type="text"]:disabled { opacity: 0.6; cursor: not-allowed; background: #ece9e3; }
 
   .canvas-wrap { background: #ffffff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   canvas#preview { display: block; width: 100%; }
 
   .legend { display: flex; gap: 1rem; flex-wrap: wrap; padding-top: 2px; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
-  .leg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot); flex-shrink: 0; }
-  .leg-ring { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--dot); flex-shrink: 0; }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; background: #1a1916; flex-shrink: 0; }
+  .leg-ring { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #1a1916; flex-shrink: 0; }
   .leg-line { width: 24px; height: 2px; background: var(--accent); flex-shrink: 0; position: relative; }
   .leg-line::after { content:''; position:absolute; right:-2px; top:-3px; border-left: 6px solid var(--accent); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--text); color: #fff; padding: 9px 18px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 9999; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -200,6 +127,11 @@
     <h1>Runner Geam</h1>
     <p><span>RunnerNotation</span> creator</p>
   </header>
+
+  <div id="locked-banner" class="locked-banner" style="display:none">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><rect x="3" y="7" width="10" height="8" rx="2" fill="#c8960a"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#c8960a" stroke-width="1.5" stroke-linecap="round"/></svg>
+    This notation is locked — the author and tech name cannot be changed.
+  </div>
 
   <div class="layout">
     <div>
@@ -216,8 +148,21 @@
           <span class="empty-hint">Click on moves to add them</span>
         </div>
         <div class="btn-row" style="margin-top:12px;">
-          <button class="btn" onclick="clearSeq()">Clear</button>
+          <button class="btn" id="btn-clear" onclick="clearSeq()">Clear</button>
           <button class="btn dl" onclick="downloadPNG()">Download PNG ↓</button>
+          <button class="btn share" onclick="shareLink()">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <circle cx="12" cy="3" r="2" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="12" cy="13" r="2" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="4" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M6 7L10 4.5M6 9L10 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Share link
+          </button>
+        </div>
+        <div class="share-url-row" id="share-url-row" style="display:none">
+          <input type="text" id="share-url-input" readonly onclick="this.select()">
+          <button class="btn" onclick="copyShareUrl()">Copy</button>
         </div>
       </div>
 
@@ -235,11 +180,32 @@
         <div class="divider"></div>
 
         <div class="field-row">
-          <label>Tech name</label>
+          <label>
+            <span>Tech name</span>
+            <label class="lock-toggle" id="lock-tech-wrap">
+              <input type="checkbox" id="lock-tech" onchange="onLockChange('tech')">
+              <span class="lock-icon">
+                <svg class="icon-open" width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7.5" width="10" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7.5V5a3 3 0 015.97-.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <svg class="icon-closed" width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="1.5" stroke="#e53030" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#e53030" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+              <span class="lock-text">Lock</span>
+            </label>
+          </label>
           <input type="text" id="tech-name" placeholder="What is your tech called?" oninput="draw()">
         </div>
+
         <div class="field-row">
-          <label>Author name</label>
+          <label>
+            <span>Author name</span>
+            <label class="lock-toggle" id="lock-author-wrap">
+              <input type="checkbox" id="lock-author" onchange="onLockChange('author')">
+              <span class="lock-icon">
+                <svg class="icon-open" width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7.5" width="10" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7.5V5a3 3 0 015.97-.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <svg class="icon-closed" width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="8" rx="1.5" stroke="#e53030" stroke-width="1.5"/><path d="M5 7V5a3 3 0 016 0v2" stroke="#e53030" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </span>
+              <span class="lock-text">Lock</span>
+            </label>
+          </label>
           <input type="text" id="author-name" placeholder="What is your name?" oninput="draw()">
         </div>
       </div>
@@ -262,10 +228,13 @@
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
 const MOVES = ["Parry","Wallrun","Lunge","Slide","Jump","Doublejump","Platform","Groundslam"];
 const N = MOVES.length;
 const seq = [];
+let seqLocked = false; // true when opened from a shared link with locked fields
 
 function angle(i) { return (Math.PI * 2 * i / N) - Math.PI / 2; }
 
@@ -275,8 +244,10 @@ function renderMoves() {
   MOVES.forEach((m, i) => {
     const b = document.createElement('button');
     b.className = 'move-btn';
+    b.id = 'movebtn-' + i;
     b.innerHTML = `<span class="index">${i+1}</span>${m}`;
     b.onclick = () => { seq.push(i); renderSeq(); draw(); };
+    if (seqLocked) b.disabled = true;
     el.appendChild(b);
   });
 }
@@ -284,17 +255,30 @@ function renderMoves() {
 function renderSeq() {
   const el = document.getElementById('sequence');
   el.innerHTML = '';
-  if (!seq.length) { el.innerHTML = '<span class="empty-hint">click moves to add them</span>'; return; }
+  if (!seq.length) { el.innerHTML = '<span class="empty-hint">Click on moves to add them</span>'; return; }
   seq.forEach((idx, p) => {
     const t = document.createElement('div');
     t.className = 'seq-tag';
-    t.innerHTML = `<span class="num">${p+1}</span>${MOVES[idx]}<span class="rm" onclick="remove(${p})">×</span>`;
+    const rmPart = seqLocked ? '' : `<span class="rm" onclick="remove(${p})">×</span>`;
+    t.innerHTML = `<span class="num">${p+1}</span>${MOVES[idx]}${rmPart}`;
     el.appendChild(t);
   });
 }
 
 function remove(p) { seq.splice(p, 1); renderSeq(); draw(); }
-function clearSeq() { seq.length = 0; renderSeq(); draw(); }
+
+function clearSeq() {
+  seq.length = 0;
+  renderSeq();
+  draw();
+  document.getElementById('share-url-row').style.display = 'none';
+}
+
+function onLockChange(field) {
+  const input = document.getElementById(field === 'tech' ? 'tech-name' : 'author-name');
+  const cb = document.getElementById(field === 'tech' ? 'lock-tech' : 'lock-author');
+  input.classList.toggle('is-locked', cb.checked);
+}
 
 function getOptions() {
   return {
@@ -302,6 +286,83 @@ function getOptions() {
     techName: document.getElementById('tech-name').value.trim(),
     authorName: document.getElementById('author-name').value.trim()
   };
+}
+
+function buildShareURL() {
+  const opts = getOptions();
+  const data = {
+    s: seq,
+    l: opts.showLabels ? 1 : 0,
+    t: opts.techName,
+    a: opts.authorName,
+    lt: document.getElementById('lock-tech').checked ? 1 : 0,
+    la: document.getElementById('lock-author').checked ? 1 : 0
+  };
+  const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  const base = window.location.href.split('?')[0].split('#')[0];
+  return `${base}?n=${b64}`;
+}
+
+function shareLink() {
+  const url = buildShareURL();
+  const row = document.getElementById('share-url-row');
+  document.getElementById('share-url-input').value = url;
+  row.style.display = 'flex';
+  copyShareUrl();
+}
+
+function copyShareUrl() {
+  const val = document.getElementById('share-url-input').value;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(val).then(() => showToast('Link copied to clipboard!'));
+  } else {
+    document.getElementById('share-url-input').select();
+    document.execCommand('copy');
+    showToast('Link copied to clipboard!');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function loadFromURL() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('n')) return;
+
+    const json = decodeURIComponent(escape(atob(params.get('n'))));
+    const data = JSON.parse(json);
+
+    if (Array.isArray(data.s)) {
+      seq.push(...data.s.filter(n => Number.isInteger(n) && n >= 0 && n < N));
+    }
+    if (data.l === 0) document.getElementById('toggle-labels').checked = false;
+    if (data.t) document.getElementById('tech-name').value = data.t;
+    if (data.a) document.getElementById('author-name').value = data.a;
+
+    const techLocked = data.lt === 1;
+    const authorLocked = data.la === 1;
+
+    if (techLocked) {
+      const inp = document.getElementById('tech-name');
+      inp.disabled = true;
+      document.getElementById('lock-tech-wrap').style.display = 'none';
+    }
+    if (authorLocked) {
+      const inp = document.getElementById('author-name');
+      inp.disabled = true;
+      document.getElementById('lock-author-wrap').style.display = 'none';
+    }
+    if (techLocked && authorLocked) {
+      document.getElementById('locked-banner').style.display = 'flex';
+    }
+  } catch(e) {
+    console.warn('Could not parse notation from URL', e);
+  }
 }
 
 function renderToCanvas(ctx, baseSize, opts) {
@@ -314,8 +375,7 @@ function renderToCanvas(ctx, baseSize, opts) {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, baseSize, totalH);
 
-  const CX = baseSize / 2;
-  const CY = baseSize / 2;
+  const CX = baseSize / 2, CY = baseSize / 2;
   const R = (showLabels ? 0.336 : 0.38) * baseSize;
   const DOT_R = 0.018 * baseSize;
   const LABEL_OFF = 0.06 * baseSize;
@@ -325,31 +385,18 @@ function renderToCanvas(ctx, baseSize, opts) {
       const a1 = angle(seq[i]), a2 = angle(seq[i+1]);
       const x1 = CX + R * Math.cos(a1), y1 = CY + R * Math.sin(a1);
       const x2 = CX + R * Math.cos(a2), y2 = CY + R * Math.sin(a2);
-      const dx = x2-x1, dy = y2-y1;
-      const len = Math.sqrt(dx*dx+dy*dy);
-      const nx = dx/len, ny = dy/len;
-      const gap = DOT_R + 0.008 * baseSize;
-      const sx = x1+nx*gap, sy = y1+ny*gap;
-      const ex = x2-nx*gap, ey = y2-ny*gap;
+      const dx = x2-x1, dy = y2-y1, len = Math.sqrt(dx*dx+dy*dy);
+      const nx = dx/len, ny = dy/len, gap = DOT_R + 0.008 * baseSize;
+      const sx = x1+nx*gap, sy = y1+ny*gap, ex = x2-nx*gap, ey = y2-ny*gap;
 
-      ctx.beginPath();
-      ctx.moveTo(sx, sy);
-      ctx.lineTo(ex, ey);
-      ctx.strokeStyle = '#e53030';
-      ctx.lineWidth = 0.005 * baseSize;
-      ctx.lineCap = 'round';
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey);
+      ctx.strokeStyle = '#e53030'; ctx.lineWidth = 0.005 * baseSize; ctx.lineCap = 'round'; ctx.stroke();
 
       const al = 0.02 * baseSize, aw = 0.01 * baseSize;
-      const ax = ex-nx*al, ay = ey-ny*al;
-      const px = -ny, py = nx;
-      ctx.beginPath();
-      ctx.moveTo(ex, ey);
-      ctx.lineTo(ax+px*aw, ay+py*aw);
-      ctx.lineTo(ax-px*aw, ay-py*aw);
-      ctx.closePath();
-      ctx.fillStyle = '#e53030';
-      ctx.fill();
+      const ax = ex-nx*al, ay = ey-ny*al, px = -ny, py = nx;
+      ctx.beginPath(); ctx.moveTo(ex, ey);
+      ctx.lineTo(ax+px*aw, ay+py*aw); ctx.lineTo(ax-px*aw, ay-py*aw);
+      ctx.closePath(); ctx.fillStyle = '#e53030'; ctx.fill();
     }
   }
 
@@ -359,104 +406,70 @@ function renderToCanvas(ctx, baseSize, opts) {
     const isStart = seq[0] === i;
 
     if (isStart) {
-      ctx.beginPath();
-      ctx.arc(x, y, DOT_R + 0.012 * baseSize, 0, Math.PI*2);
-      ctx.strokeStyle = '#1a1916';
-      ctx.lineWidth = 0.004 * baseSize;
-      ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, DOT_R + 0.012 * baseSize, 0, Math.PI*2);
+      ctx.strokeStyle = '#1a1916'; ctx.lineWidth = 0.004 * baseSize; ctx.stroke();
     }
 
-    ctx.beginPath();
-    ctx.arc(x, y, DOT_R, 0, Math.PI*2);
-    ctx.fillStyle = seq.includes(i) ? '#1a1916' : '#aaa9a5';
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, DOT_R, 0, Math.PI*2);
+    ctx.fillStyle = seq.includes(i) ? '#1a1916' : '#aaa9a5'; ctx.fill();
 
     const seqNums = seq.map((idx, p) => idx===i ? p+1 : null).filter(v=>v!==null);
     if (seqNums.length) {
       const fs = (seqNums.length > 1 ? 0.016 : 0.02) * baseSize;
-      ctx.font = `bold ${fs}px monospace`;
-      ctx.fillStyle = '#ffffff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+      ctx.font = `bold ${fs}px monospace`; ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(seqNums[0], x, y + 0.001*baseSize);
     }
 
     if (showLabels) {
-      const lx = CX + (R + LABEL_OFF) * Math.cos(a);
-      const ly = CY + (R + LABEL_OFF) * Math.sin(a);
-      ctx.font = `${0.024 * baseSize}px sans-serif`;
-      ctx.fillStyle = '#1a1916';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(name, lx, ly);
+      const lx = CX + (R + LABEL_OFF) * Math.cos(a), ly = CY + (R + LABEL_OFF) * Math.sin(a);
+      ctx.font = `${0.024 * baseSize}px sans-serif`; ctx.fillStyle = '#1a1916';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(name, lx, ly);
     }
   });
 
   if (hasFooter) {
     const fy = baseSize;
-    ctx.fillStyle = '#f5f3ee';
-    ctx.fillRect(0, fy, baseSize, footerH);
-    ctx.beginPath();
-    ctx.moveTo(0, fy);
-    ctx.lineTo(baseSize, fy);
-    ctx.strokeStyle = '#ddd9d0';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    const pad = 0.048 * baseSize;
-    const midY = fy + footerH / 2;
-
+    ctx.fillStyle = '#f5f3ee'; ctx.fillRect(0, fy, baseSize, footerH);
+    ctx.beginPath(); ctx.moveTo(0, fy); ctx.lineTo(baseSize, fy);
+    ctx.strokeStyle = '#ddd9d0'; ctx.lineWidth = 1; ctx.stroke();
+    const pad = 0.048 * baseSize, midY = fy + footerH / 2;
     if (techName) {
-      ctx.font = `500 ${0.03 * baseSize}px sans-serif`;
-      ctx.fillStyle = '#1a1916';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(techName, pad, midY);
+      ctx.font = `500 ${0.03 * baseSize}px sans-serif`; ctx.fillStyle = '#1a1916';
+      ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(techName, pad, midY);
     }
     if (authorName) {
-      ctx.font = `${0.026 * baseSize}px monospace`;
-      ctx.fillStyle = '#888480';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(authorName, baseSize - pad, midY);
+      ctx.font = `${0.026 * baseSize}px monospace`; ctx.fillStyle = '#888480';
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText(authorName, baseSize - pad, midY);
     }
   }
 }
 
 function draw() {
   const opts = getOptions();
-  const { techName, authorName } = opts;
-  const hasFooter = !!(techName || authorName);
-
+  const hasFooter = !!(opts.techName || opts.authorName);
   const canvas = document.getElementById('preview');
   const baseSize = 500;
   const footerH = hasFooter ? Math.round(baseSize * 0.112) : 0;
-  canvas.width = baseSize;
-  canvas.height = baseSize + footerH;
-  canvas.style.width = '100%';
-  canvas.style.height = 'auto';
-
+  canvas.width = baseSize; canvas.height = baseSize + footerH;
+  canvas.style.width = '100%'; canvas.style.height = 'auto';
   renderToCanvas(canvas.getContext('2d'), baseSize, opts);
 }
 
 function downloadPNG() {
   const opts = getOptions();
-  const { techName, authorName } = opts;
-  const hasFooter = !!(techName || authorName);
+  const hasFooter = !!(opts.techName || opts.authorName);
   const baseSize = 1000;
   const footerH = hasFooter ? Math.round(baseSize * 0.112) : 0;
-
   const off = document.createElement('canvas');
-  off.width = baseSize;
-  off.height = baseSize + footerH;
+  off.width = baseSize; off.height = baseSize + footerH;
   renderToCanvas(off.getContext('2d'), baseSize, opts);
-
   const a = document.createElement('a');
-  a.download = 'runner_notation.png';
-  a.href = off.toDataURL('image/png');
-  a.click();
+  a.download = (opts.techName || 'runner_notation') + '.png';
+  a.href = off.toDataURL('image/png'); a.click();
 }
 
+loadFromURL();
 renderMoves();
 renderSeq();
 draw();
